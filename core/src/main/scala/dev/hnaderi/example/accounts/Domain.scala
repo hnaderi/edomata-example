@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.eventsourcing
+package dev.hnaderi.example.accounts
 
 import edomata.core.*
 import edomata.syntax.all.*

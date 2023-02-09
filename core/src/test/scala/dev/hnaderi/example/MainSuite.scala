@@ -15,10 +15,9 @@
  */
 
 package dev.hnaderi.example
-package eventsourcing
+package accounts
 
 import cats.Id
-import dev.hnaderi.example.eventsourcing.AccountService
 import edomata.munit.DomainSuite
 
 class DomainLogicSuite extends DomainSuite(msgId = "msg", address = "sut") {

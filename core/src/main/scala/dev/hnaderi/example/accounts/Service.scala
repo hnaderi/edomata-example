@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.eventsourcing
+package dev.hnaderi.example.accounts
 
 enum Command {
   case Open

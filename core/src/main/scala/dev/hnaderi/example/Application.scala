@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.eventsourcing
+package dev.hnaderi.example
 
 import cats.effect.IO
-import cats.effect.kernel.Resource
-import edomata.backend.Backend
-import edomata.skunk.*
-import io.circe.generic.auto.*
+import cats.effect.IOApp
+import dev.hnaderi.example.orders.OrdersApp
+import dev.hnaderi.example.accounts.AccountsApp
+import natchez.Trace.Implicits.noop
 import skunk.Session
 
+final case class Application(
+    accounts: AccountsApp,
+    orders: OrdersApp
+)
+
 object Application {
-  given BackendCodec[Event] = CirceCodec.jsonb // or .json
-  given BackendCodec[Notification] = CirceCodec.jsonb
-  given BackendCodec[Account] = CirceCodec.jsonb
+  def apply() = for {
+    pool <- Session.pooled[IO](
+      host = "localhost",
+      user = "postgres",
+      password = Some("postgres"),
+      database = "postgres",
+      max = 10
+    )
 
-  def backend(pool: Resource[IO, Session[IO]]) = Backend
-    .builder(AccountService)
-    .use(SkunkDriver("eventsourcing_example", pool))
-    .persistedSnapshot(maxInMem = 100)
-    .build
-
-  def apply(pool: Resource[IO, Session[IO]]) =
-    backend(pool).map(_.compile(AccountService[IO]))
+    accounts <- AccountsApp(pool)
+    orders <- OrdersApp(pool)
+  } yield new Application(accounts, orders)
 }

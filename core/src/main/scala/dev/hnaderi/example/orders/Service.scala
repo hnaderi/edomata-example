@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.cqrs
+package dev.hnaderi.example.orders
 
 import edomata.core.*
 import edomata.syntax.all.* // for convenient extension methods
 import cats.syntax.all.* // to make life easier
 import cats.data.ValidatedNec
 
-import dev.hnaderi.example.cqrs.Order
 enum Command {
   case Place(food: String, address: String)
   case MarkAsCooking(cook: String)

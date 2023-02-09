@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.cqrs
+package dev.hnaderi.example.orders
 
 import edomata.core.*
 import edomata.syntax.all.* // for convenient extension methods

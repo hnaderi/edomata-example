@@ -20,7 +20,7 @@ ThisBuild / scalaVersion := "3.2.2"
 
 lazy val root = tlCrossRootProject.aggregate(core)
 
-lazy val core = crossProject(JVMPlatform, JSPlatform, NativePlatform)
+lazy val core = crossProject(JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .enablePlugins(NoPublishPlugin)
@@ -31,9 +31,6 @@ lazy val core = crossProject(JVMPlatform, JSPlatform, NativePlatform)
       "dev.hnaderi" %%% "edomata-munit" % "0.9.0" % Test,
       "io.circe" %%% "circe-generic" % "0.14.3"
     )
-  )
-  .nativeSettings(
-    libraryDependencies += "com.armanbilge" %%% "epollcat" % "0.1.3"
   )
 
 lazy val docs = project.in(file("site")).enablePlugins(TypelevelSitePlugin)

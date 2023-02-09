@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example.cqrs
+package dev.hnaderi.example.accounts
 
 import cats.effect.IO
 import cats.effect.kernel.Resource
@@ -23,15 +23,22 @@ import edomata.skunk.*
 import io.circe.generic.auto.*
 import skunk.Session
 
-object Application {
+object AccountsApp {
+  given BackendCodec[Event] = CirceCodec.jsonb // or .json
   given BackendCodec[Notification] = CirceCodec.jsonb
-  given BackendCodec[Order] = CirceCodec.jsonb
+  given BackendCodec[Account] = CirceCodec.jsonb
 
   def backend(pool: Resource[IO, Session[IO]]) = Backend
-    .builder(OrderService)
-    .use(SkunkCQRSDriver("cqrs_example", pool))
+    .builder(AccountService)
+    .use(SkunkDriver("eventsourcing_example", pool))
+    .persistedSnapshot(maxInMem = 100)
     .build
 
   def apply(pool: Resource[IO, Session[IO]]) =
-    backend(pool).map(_.compile(OrderService[IO]))
+    backend(pool).map(s => new AccountsApp(s, s.compile(AccountService[IO])))
 }
+
+final case class AccountsApp(
+    storage: Backend[IO, Account, Event, Rejection, Notification],
+    service: AccountService.Handler[IO]
+)
