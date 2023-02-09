@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package dev.hnaderi.example
-package eventsourcing
+package dev.hnaderi.example.cqrs
 
-import cats.Id
-import dev.hnaderi.example.eventsourcing.AccountService
-import edomata.munit.DomainSuite
+import cats.effect.IO
+import cats.effect.kernel.Resource
+import edomata.backend.Backend
+import edomata.skunk.*
+import io.circe.generic.auto.*
+import skunk.Session
 
-class DomainLogicSuite extends DomainSuite(msgId = "msg", address = "sut") {
-  test("Test") {
-    AccountService[Id].expect(Command.Open, Account.New)(
-      Account.Open(0),
-      Notification.AccountOpened("sut")
-    )
-  }
+object Application {
+  given BackendCodec[Notification] = CirceCodec.jsonb
+  given BackendCodec[Order] = CirceCodec.jsonb
+
+  def backend(pool: Resource[IO, Session[IO]]) = Backend
+    .builder(OrderService)
+    .use(SkunkCQRSDriver("cqrs_example", pool))
+    .build
+
+  def apply(pool: Resource[IO, Session[IO]]) =
+    backend(pool).map(_.compile(OrderService[IO]))
 }

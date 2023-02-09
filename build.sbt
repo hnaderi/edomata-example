@@ -28,7 +28,8 @@ lazy val core = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     name := "edomata-example",
     libraryDependencies ++= Seq(
       "dev.hnaderi" %%% "edomata-skunk-circe" % "0.9.0",
-      "dev.hnaderi" %%% "edomata-munit" % "0.9.0" % Test
+      "dev.hnaderi" %%% "edomata-munit" % "0.9.0" % Test,
+      "io.circe" %%% "circe-generic" % "0.14.3"
     )
   )
   .nativeSettings(
