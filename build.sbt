@@ -10,12 +10,6 @@ ThisBuild / developers := List(
   tlGitHubDev("hnaderi", "Hossein Naderi")
 )
 
-// publish to s01.oss.sonatype.org (set to true to publish to oss.sonatype.org instead)
-ThisBuild / tlSonatypeUseLegacyHost := false
-
-// publish website from this branch
-ThisBuild / tlSitePublishBranch := Some("main")
-
 ThisBuild / scalaVersion := "3.2.2"
 
 lazy val root = tlCrossRootProject.aggregate(core)
@@ -32,5 +26,3 @@ lazy val core = crossProject(JVMPlatform)
       "io.circe" %%% "circe-generic" % "0.14.3"
     )
   )
-
-lazy val docs = project.in(file("site")).enablePlugins(TypelevelSitePlugin)
