@@ -39,7 +39,5 @@ object OrdersApp {
 
 final case class OrdersApp(
     storage: cqrs.Backend[IO, Order, Rejection, Notification],
-    service: DomainService[IO, CommandMessage[Command], Rejection]
-    // TODO this should be OrderService.Handler[IO]
-    // But the published artifact does not include this yet
+    service: OrderService.Handler[IO]
 )
