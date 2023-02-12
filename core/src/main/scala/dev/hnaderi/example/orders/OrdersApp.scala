@@ -16,28 +16,28 @@
 
 package dev.hnaderi.example.orders
 
-import cats.effect.IO
 import cats.effect.kernel.Resource
 import edomata.backend.*
 import edomata.core.*
 import edomata.skunk.*
 import io.circe.generic.auto.*
 import skunk.Session
+import cats.effect.kernel.Async
 
 object OrdersApp {
   given BackendCodec[Notification] = CirceCodec.jsonb
   given BackendCodec[Order] = CirceCodec.jsonb
 
-  def backend(pool: Resource[IO, Session[IO]]) = Backend
+  def backend[F[_]: Async](pool: Resource[F, Session[F]]) = Backend
     .builder(OrderService)
     .use(SkunkCQRSDriver("cqrs_example", pool))
     .build
 
-  def apply(pool: Resource[IO, Session[IO]]) =
-    backend(pool).map(s => new OrdersApp(s, s.compile(OrderService[IO])))
+  def apply[F[_]: Async](pool: Resource[F, Session[F]]) =
+    backend(pool).map(s => new OrdersApp(s, s.compile(OrderService[F])))
 }
 
-final case class OrdersApp(
-    storage: cqrs.Backend[IO, Order, Rejection, Notification],
-    service: OrderService.Handler[IO]
+final case class OrdersApp[F[_]](
+    storage: cqrs.Backend[F, Order, Rejection, Notification],
+    service: OrderService.Handler[F]
 )

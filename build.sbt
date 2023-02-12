@@ -12,17 +12,35 @@ ThisBuild / developers := List(
 
 ThisBuild / scalaVersion := "3.2.2"
 
-lazy val root = tlCrossRootProject.aggregate(core)
+lazy val root = tlCrossRootProject.aggregate(domain, catsEffect, zio)
 
-lazy val core = crossProject(JVMPlatform)
+lazy val domain = crossProject(JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .enablePlugins(NoPublishPlugin)
   .settings(
-    name := "edomata-example",
+    name := "edomata-domain-example",
     libraryDependencies ++= Seq(
       "dev.hnaderi" %%% "edomata-skunk-circe" % "0.9.1",
       "dev.hnaderi" %%% "edomata-munit" % "0.9.1" % Test,
       "io.circe" %%% "circe-generic" % "0.14.3"
     )
   )
+
+lazy val catsEffect = crossProject(JVMPlatform)
+  .crossType(CrossType.Pure)
+  .dependsOn(domain)
+  .enablePlugins(NoPublishPlugin)
+  .settings(
+    name := "edomata-ce-example"
+  )
+
+lazy val zio = project
+  .dependsOn(domain.jvm)
+  .settings(
+    name := "edomata-zio-example",
+    libraryDependencies ++= Seq(
+      "dev.zio" %% "zio-interop-cats" % "23.0.0.1"
+    )
+  )
+  .enablePlugins(NoPublishPlugin)

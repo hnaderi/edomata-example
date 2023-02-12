@@ -16,21 +16,21 @@
 
 package dev.hnaderi.example
 
-import cats.effect.IO
-import cats.effect.IOApp
-import dev.hnaderi.example.orders.OrdersApp
+import cats.effect.kernel.Async
+import cats.effect.std.Console
 import dev.hnaderi.example.accounts.AccountsApp
+import dev.hnaderi.example.orders.OrdersApp
 import natchez.Trace.Implicits.noop
 import skunk.Session
 
-final case class Application(
-    accounts: AccountsApp,
-    orders: OrdersApp
+final case class Application[F[_]](
+    accounts: AccountsApp[F],
+    orders: OrdersApp[F]
 )
 
 object Application {
-  def apply() = for {
-    pool <- Session.pooled[IO](
+  def apply[F[_]: Async: Console]() = for {
+    pool <- Session.pooled[F](
       host = "localhost",
       user = "postgres",
       password = Some("postgres"),

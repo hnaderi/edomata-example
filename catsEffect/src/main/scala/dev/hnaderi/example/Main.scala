@@ -26,7 +26,7 @@ object Main extends IOApp.Simple {
 
   private val now = IO.realTime.map(d => Instant.EPOCH.plusNanos(d.toNanos))
 
-  def run: IO[Unit] = Application().use(app =>
+  def run: IO[Unit] = Application[IO]().use(app =>
     for {
       // You can use backend and service for each of the domains
       // You will most likely need to integrate them to your infrastructure

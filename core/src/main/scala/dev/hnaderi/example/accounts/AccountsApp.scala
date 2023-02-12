@@ -16,29 +16,29 @@
 
 package dev.hnaderi.example.accounts
 
-import cats.effect.IO
 import cats.effect.kernel.Resource
 import edomata.backend.Backend
 import edomata.skunk.*
 import io.circe.generic.auto.*
 import skunk.Session
+import cats.effect.kernel.Async
 
 object AccountsApp {
   given BackendCodec[Event] = CirceCodec.jsonb // or .json
   given BackendCodec[Notification] = CirceCodec.jsonb
   given BackendCodec[Account] = CirceCodec.jsonb
 
-  def backend(pool: Resource[IO, Session[IO]]) = Backend
+  def backend[F[_]: Async](pool: Resource[F, Session[F]]) = Backend
     .builder(AccountService)
     .use(SkunkDriver("eventsourcing_example", pool))
     .persistedSnapshot(maxInMem = 100)
     .build
 
-  def apply(pool: Resource[IO, Session[IO]]) =
-    backend(pool).map(s => new AccountsApp(s, s.compile(AccountService[IO])))
+  def apply[F[_]: Async](pool: Resource[F, Session[F]]) =
+    backend(pool).map(s => new AccountsApp(s, s.compile(AccountService[F])))
 }
 
-final case class AccountsApp(
-    storage: Backend[IO, Account, Event, Rejection, Notification],
-    service: AccountService.Handler[IO]
+final case class AccountsApp[F[_]](
+    storage: Backend[F, Account, Event, Rejection, Notification],
+    service: AccountService.Handler[F]
 )
