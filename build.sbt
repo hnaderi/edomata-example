@@ -14,7 +14,7 @@ ThisBuild / scalaVersion := "3.2.2"
 
 lazy val root = tlCrossRootProject.aggregate(domain, catsEffect, zio)
 
-lazy val domain = crossProject(JVMPlatform)
+lazy val domain = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .enablePlugins(NoPublishPlugin)
@@ -27,12 +27,16 @@ lazy val domain = crossProject(JVMPlatform)
     )
   )
 
-lazy val catsEffect = crossProject(JVMPlatform)
+lazy val catsEffect = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Pure)
   .dependsOn(domain)
   .enablePlugins(NoPublishPlugin)
   .settings(
     name := "edomata-ce-example"
+  )
+  .jsSettings(
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule))
   )
 
 lazy val zio = project
