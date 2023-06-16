@@ -25,6 +25,7 @@ import zio.interop.catz.*
 object Main extends ZIOAppDefault {
 
   private given CEConsole[Task] = CEConsole.make[Task]
+  private given Network[Task] = Network.forAsync[Task]
 
   override def run = ZIO.scoped {
     for {
