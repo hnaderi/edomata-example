@@ -20,6 +20,7 @@ import cats.effect.kernel.Async
 import cats.effect.std.Console
 import dev.hnaderi.example.accounts.AccountsApp
 import dev.hnaderi.example.orders.OrdersApp
+import fs2.io.net.Network
 import natchez.Trace.Implicits.noop
 import skunk.Session
 
@@ -29,7 +30,7 @@ final case class Application[F[_]](
 )
 
 object Application {
-  def apply[F[_]: Async: Console]() = for {
+  def apply[F[_]: Async: Network: Console]() = for {
     pool <- Session.pooled[F](
       host = "localhost",
       user = "postgres",
