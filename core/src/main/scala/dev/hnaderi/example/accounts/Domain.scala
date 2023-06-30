@@ -60,7 +60,7 @@ enum Account {
       if account.balance >= amount && amount > 0
       then Decision.accept(Event.Withdrawn(amount))
       else Decision.reject(Rejection.InsufficientBalance)
-    // We can model rejections to have values, which helps a lot for showing error messages, but it's out of scope for this document
+      // We can model rejections to have values, which helps a lot for showing error messages, but it's out of scope for this document
     })
     .validate(_.mustBeOpen)
 
