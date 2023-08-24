@@ -18,7 +18,6 @@ package dev.hnaderi.example.orders
 
 import cats.effect.kernel.Resource
 import edomata.backend.*
-import edomata.core.*
 import edomata.skunk.*
 import io.circe.generic.auto.*
 import skunk.Session

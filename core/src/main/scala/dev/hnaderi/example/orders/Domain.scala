@@ -17,9 +17,7 @@
 package dev.hnaderi.example.orders
 
 import edomata.core.*
-import edomata.syntax.all.* // for convenient extension methods
 import cats.syntax.all.* // to make life easier
-import cats.data.ValidatedNec
 
 enum OrderStatus {
   case New

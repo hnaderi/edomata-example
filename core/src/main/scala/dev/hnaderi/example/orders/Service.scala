@@ -18,8 +18,6 @@ package dev.hnaderi.example.orders
 
 import edomata.core.*
 import edomata.syntax.all.* // for convenient extension methods
-import cats.syntax.all.* // to make life easier
-import cats.data.ValidatedNec
 
 enum Command {
   case Place(food: String, address: String)
