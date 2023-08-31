@@ -23,7 +23,7 @@ lazy val domain = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     libraryDependencies ++= Seq(
       "dev.hnaderi" %%% "edomata-skunk-circe" % "0.11.1",
       "dev.hnaderi" %%% "edomata-munit" % "0.11.1" % Test,
-      "io.circe" %%% "circe-generic" % "0.14.5"
+      "io.circe" %%% "circe-generic" % "0.14.6"
     )
   )
 
