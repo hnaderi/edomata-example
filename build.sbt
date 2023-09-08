@@ -10,7 +10,7 @@ ThisBuild / developers := List(
   tlGitHubDev("hnaderi", "Hossein Naderi")
 )
 
-ThisBuild / scalaVersion := "3.3.0"
+ThisBuild / scalaVersion := "3.3.1"
 
 lazy val root = tlCrossRootProject.aggregate(domain, catsEffect, zio)
 
