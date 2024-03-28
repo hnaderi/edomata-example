@@ -207,3 +207,14 @@ jobs:
         with:
           modules-ignore: edomata-ce-example_sjs1_3 rootjs_3 rootjvm_3 edomata-zio-example_3 rootnative_3 edomata-domain-example_sjs1_3 edomata-domain-example_native0.4_3 edomata-ce-example_3 edomata-domain-example_3
           configs-ignore: test scala-tool scala-doc-tool test-internal
+
+  post-build:
+    name: post build
+    needs: [build]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: post build
+        run: echo success!
