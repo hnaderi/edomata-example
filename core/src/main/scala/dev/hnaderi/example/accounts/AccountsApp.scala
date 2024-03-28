@@ -16,12 +16,14 @@
 
 package dev.hnaderi.example.accounts
 
+import cats.effect.kernel.Async
 import cats.effect.kernel.Resource
 import edomata.backend.Backend
-import edomata.skunk.*
+import edomata.backend.eventsourcing
 import io.circe.generic.auto.*
 import skunk.Session
-import cats.effect.kernel.Async
+
+import edomata.skunk.*
 
 object AccountsApp {
   given BackendCodec[Event] = CirceCodec.jsonb // or .json
@@ -39,6 +41,6 @@ object AccountsApp {
 }
 
 final case class AccountsApp[F[_]](
-    storage: Backend[F, Account, Event, Rejection, Notification],
+    storage: eventsourcing.Backend[F, Account, Event, Rejection, Notification],
     service: AccountService.Handler[F]
 )
