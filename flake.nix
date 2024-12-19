@@ -22,12 +22,12 @@
               nodejs.enable = true;
               native = {
                 enable = true;
-                libraries = with pkgs; [ s2n utf8proc openssl ];
+                libraries = with pkgs; [ s2n-tls utf8proc openssl ];
               };
             };
           };
       in {
-        devShell = mkShell pkgs.jdk8;
+        devShell = mkShell pkgs.jdk17;
 
         devShells = {
           "temurin@8" = mkShell pkgs.temurin-bin-8;
