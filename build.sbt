@@ -44,7 +44,7 @@ lazy val zio = project
   .settings(
     name := "edomata-zio-example",
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio-interop-cats" % "23.1.0.3"
+      "dev.zio" %% "zio-interop-cats" % "23.1.0.10"
     )
   )
   .enablePlugins(NoPublishPlugin)
